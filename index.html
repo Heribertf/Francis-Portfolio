@@ -212,9 +212,9 @@
                     <div class="row align-items-center">
                         <div class="col-md-6">
                             <div class="edu-col">
-                                <span>Dec 2023</span>
-                                <h3>Certified Pediatric Nurse (CPN)</h3>
-                                <p>Pediatric Nursing Certification Board (PNCB)</p>
+                                <span>June 2023</span>
+                                <h3>Certified Basic Life Support Provider (BLSP)</h3>
+                                <p>National Resuscitation Council of Kenya</p>
                             </div>
                         </div>
 
@@ -358,7 +358,7 @@
                         <div class="col-lg-4 col-md-6 portfolio-item web-des">
                             <div class="portfolio-wrap">
                                 <figure>
-                                    <video controls autoplay muted loop class="img-fluid">
+                                    <video controls muted preload="metadata" class="img-fluid">
                                         <source src="./video/video1.mp4" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>
@@ -376,7 +376,7 @@
                         <div class="col-lg-4 col-md-6 portfolio-item web-des">
                             <div class="portfolio-wrap">
                                 <figure>
-                                    <video controls autoplay muted loop class="img-fluid">
+                                    <video controls muted preload="metadata" class="img-fluid">
                                         <source src="./video/video2.mp4" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>
@@ -395,7 +395,7 @@
                         <div class="col-lg-4 col-md-6 portfolio-item web-des">
                             <div class="portfolio-wrap">
                                 <figure>
-                                    <video controls autoplay muted loop class="img-fluid">
+                                    <video controls muted preload="metadata" class="img-fluid">
                                         <source src="./video/video3.mp4" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>
@@ -565,14 +565,45 @@
 
     <script>
         $(document).ready(function () {
+
+            // Lazy load videos using Intersection Observer
+            const videos = document.querySelectorAll("video");
+            const options = {
+                root: null,
+                rootMargin: "0px",
+                threshold: 0.1
+            };
+
+            function handleIntersect(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.play();
+                    } else {
+                        entry.target.pause();
+                    }
+                });
+            }
+
+            const observer = new IntersectionObserver(handleIntersect, options);
+
+            videos.forEach(video => {
+                observer.observe(video);
+            });
+
+            // Initialize Magnific Popup for video links
             $('.link-preview').magnificPopup({
                 type: 'iframe',
                 mainClass: 'mfp-fade',
                 removalDelay: 160,
                 preloader: false,
-                fixedContentPos: false
+                fixedContentPos: false,
+                callbacks: {
+                    beforeOpen: function () {
+                        // Only load the video when the popup is about to open
+                        this.st.iframe.src = this.st.el.attr('href');
+                    }
+                }
             });
-
 
         });
 
